@@ -12,12 +12,13 @@ export async function createCheckout() {
   }
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-    apiVersion: "2024-12-18.acacia", // Usa a versão mais recente
+    apiVersion: "2025-12-15.clover",
+    typescript: true,
   })
 
   const checkoutSession = await stripe.checkout.sessions.create({
     mode: "subscription",
-    client_reference_id: session.user.id, // O segredo: guarda o ID do usuário no pagamento
+    client_reference_id: session.user.id,
     customer_email: session.user.email || "",
     line_items: [
       {
