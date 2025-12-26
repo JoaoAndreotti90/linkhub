@@ -39,7 +39,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           }
 
           return user
-        } catch (error) {
+        } catch {
           return null
         }
       }
@@ -54,7 +54,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.sub
         const user = await prisma.user.findUnique({ where: { id: token.sub }})
         if (user) {
-            session.user.slug = user.slug
+            (session.user as any).slug = user.slug
         }
       }
       return session
