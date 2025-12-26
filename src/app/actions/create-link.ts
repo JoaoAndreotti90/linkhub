@@ -38,7 +38,7 @@ export async function createLink(formData: FormData) {
     revalidatePath("/dashboard")
     return { success: true }
     
-  } catch (error) {
-    return { error: "Erro ao criar link no banco de dados" }
-  }
+  } catch {
+  return { error: "Erro ao criar link" }
+}
 }

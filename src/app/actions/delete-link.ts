@@ -21,7 +21,7 @@ export async function deleteLink(linkId: string) {
 
     revalidatePath("/dashboard")
     return { success: true }
-  } catch (error) {
-    return { error: "Erro ao deletar link" }
-  }
+  } catch {
+  return { error: "Erro ao deletar link" }
+}
 }
