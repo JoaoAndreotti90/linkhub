@@ -1,5 +1,6 @@
 import { signIn } from "@/auth"
 import { EmailLoginForm } from "@/components/email-login-form"
+import Link from "next/link" 
 
 export default function LoginPage() {
   return (
@@ -40,9 +41,9 @@ export default function LoginPage() {
 
         <p className="mt-6 text-center text-sm text-gray-600">
           Não tem uma conta?{" "}
-          <a href="/register" className="font-medium text-blue-600 hover:underline">
+          <Link href="/register" className="font-medium text-blue-600 hover:underline">
             Crie agora
-          </a>
+          </Link>
         </p>
       </div>
     </div>

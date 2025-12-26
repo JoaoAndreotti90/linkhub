@@ -33,7 +33,7 @@ export async function reorderLinks(updates: Update[]) {
     revalidatePath(`/${session.user.slug}`)
     
     return { success: true }
-  } catch (error) {
+  } catch {
     return { error: "Erro ao reordenar" }
   }
 }

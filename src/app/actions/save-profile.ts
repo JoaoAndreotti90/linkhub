@@ -32,7 +32,7 @@ export async function saveProfile(slug: string) {
 
     revalidatePath("/dashboard")
     return { success: true }
-  } catch (error) {
+  } catch {
     return { error: "Erro ao salvar perfil." }
   }
 }
