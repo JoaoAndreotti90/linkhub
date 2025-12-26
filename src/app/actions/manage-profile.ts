@@ -42,7 +42,7 @@ export async function saveProfile(formData: FormData) {
 
     revalidatePath("/dashboard")
     return { success: true }
-  } catch (error) {
+  } catch {
     return { error: "Erro ao salvar perfil." }
   }
 }

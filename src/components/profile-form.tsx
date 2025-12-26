@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { saveProfile } from "@/app/actions/save-profile"
 import { toast } from "sonner"
-import { ExternalLink, Copy, Check, Save } from "lucide-react"
+import { ExternalLink, Copy, Save } from "lucide-react"
 
 export function ProfileForm({ initialSlug }: { initialSlug?: string | null }) {
   const [slug, setSlug] = useState(initialSlug || "")
