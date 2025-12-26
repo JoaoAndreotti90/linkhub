@@ -2,38 +2,42 @@
 
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
-import { revalidatePath } from "next/cache"
 
-interface Update {
+// Definindo o tipo do item que vamos receber
+type LinkItem = {
   id: string
   order: number
 }
 
-export async function reorderLinks(updates: Update[]) {
+export async function reorderLinks(items: LinkItem[]) {
   const session = await auth()
 
+  // 1. Verificação de segurança: Se não tiver usuário, para tudo.
   if (!session?.user?.id) {
     return { error: "Não autorizado" }
   }
 
+  // 2. Guardamos o ID numa variável constante (isso acalma o TypeScript)
+  const userId = session.user.id
+
   try {
-    const transaction = updates.map((update) => 
-      prisma.link.update({
-        where: { 
-          id: update.id,
-          userId: session.user.id
-        },
-        data: { order: update.order }
-      })
+    // Usamos transaction para garantir que todos atualizem ou nenhum atualize
+    await prisma.$transaction(
+      items.map((item) =>
+        prisma.link.update({
+          where: {
+            id: item.id,
+            userId: userId, // Agora usamos a variável garantida
+          },
+          data: {
+            order: item.order,
+          },
+        })
+      )
     )
 
-    await prisma.$transaction(transaction)
-
-    revalidatePath("/dashboard")
-    revalidatePath(`/${session.user.slug}`)
-    
     return { success: true }
   } catch {
-    return { error: "Erro ao reordenar" }
+    return { error: "Erro ao reordenar links" }
   }
 }
