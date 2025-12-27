@@ -5,7 +5,7 @@ import { CreateLinkForm } from "@/components/create-link-form"
 import { ProfileForm } from "@/components/profile-form"
 import { LinkList } from "@/components/link-list"
 import { UpgradeButton } from "@/components/upgrade-button"
-import { SignOutButton } from "@/components/sign-out-button" // <--- IMPORT NOVO
+import { SignOutButton } from "@/components/sign-out-button"
 
 export default async function Dashboard() {
   const session = await auth()
@@ -30,11 +30,10 @@ export default async function Dashboard() {
           <h1 className="text-xl font-bold text-gray-900">LinkHub</h1>
           
           <div className="flex items-center gap-4">
-            <UpgradeButton />
+            <UpgradeButton plan={user?.plan} />
 
             <span className="text-sm font-medium text-gray-900">Olá, {user?.name || session.user.name}</span>
             
-            {/* Trocamos o form antigo por este componente */}
             <SignOutButton />
           </div>
         </div>
