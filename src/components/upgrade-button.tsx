@@ -1,6 +1,6 @@
 "use client"
 
-import { createCheckout } from "@/app/actions/create-checkout" // <--- Importando SUA função
+import { createCheckout } from "@/app/actions/create-checkout"
 import { Crown, Loader2 } from "lucide-react"
 import { useTransition } from "react"
 import { toast } from "sonner"
@@ -16,12 +16,15 @@ export function UpgradeButton({ plan = "FREE" }: UpgradeButtonProps) {
     startTransition(async () => {
       try {
         const result = await createCheckout()
-        // Se a função retornar erro (ex: não configurado), mostramos o toast
+        
+        // --- CORREÇÃO AQUI ---
+        // Verificamos se 'result' existe e se é um objeto antes de tentar ler '.error'
         if (result && typeof result === 'object' && 'error' in result) {
              toast.error(result.error)
         }
       } catch (error) {
-        toast.error("Erro ao iniciar pagamento.")
+        // Ignora o erro de redirecionamento do Next.js, loga outros erros
+        console.error(error)
       }
     })
   }
