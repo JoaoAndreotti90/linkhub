@@ -17,11 +17,11 @@ export async function createCheckout() {
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
     typescript: true,
-    // Removemos a linha apiVersion para evitar conflito de datas
   })
 
-  // Define a URL base (Localhost ou Vercel)
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  
+  let checkoutUrl = ""
 
   try {
     const checkoutSession = await stripe.checkout.sessions.create({
@@ -38,14 +38,19 @@ export async function createCheckout() {
       cancel_url: `${baseUrl}/dashboard?canceled=true`,
     })
 
-    if (!checkoutSession.url) {
-      return { error: "Erro ao gerar link de pagamento" }
+    if (checkoutSession.url) {
+        checkoutUrl = checkoutSession.url
+    } else {
+        return { error: "Erro ao gerar link de pagamento" }
     }
-
-    redirect(checkoutSession.url)
     
   } catch (error) {
     console.error("Erro Stripe:", error)
     return { error: "Erro ao conectar com o Stripe" }
+  }
+
+  // --- CORREÇÃO: O redirect TEM que ficar fora do try/catch ---
+  if (checkoutUrl) {
+    redirect(checkoutUrl)
   }
 }
