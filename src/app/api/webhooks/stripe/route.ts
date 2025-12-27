@@ -9,9 +9,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(req: Request) {
   const body = await req.text()
-  const signature = headers().get("Stripe-Signature") as string
   
-  // A chave secreta do webhook (vamos pegar no painel do Stripe já já)
+  // CORREÇÃO: Adicionado o 'await' antes de headers()
+  const headersList = await headers()
+  const signature = headersList.get("Stripe-Signature") as string
+  
   const secret = process.env.STRIPE_WEBHOOK_SECRET!
 
   if (!secret || !signature) {
@@ -21,18 +23,15 @@ export async function POST(req: Request) {
   let event: Stripe.Event
 
   try {
-    // Verifica se o aviso veio mesmo do Stripe e não de um hacker
     event = stripe.webhooks.constructEvent(body, signature, secret)
   } catch (error) {
     console.error("Erro na assinatura do Webhook", error)
     return new NextResponse("Webhook Error", { status: 400 })
   }
 
-  // Se o evento for "Pagamento Completado"
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session
     
-    // Pegamos o ID do usuário que enviamos lá no checkout
     if (session.client_reference_id) {
         await prisma.user.update({
             where: { id: session.client_reference_id },
@@ -41,7 +40,6 @@ export async function POST(req: Request) {
                 stripeCustomerId: session.customer as string 
             }
         })
-        console.log(`Usuário ${session.client_reference_id} virou PRO!`)
     }
   }
 
