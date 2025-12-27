@@ -16,8 +16,8 @@ export async function createCheckout() {
   }
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-    apiVersion: "2024-12-18.acacia", // Versão estável atual, ou remova essa linha
     typescript: true,
+    // Removemos a linha apiVersion para evitar conflito de datas
   })
 
   // Define a URL base (Localhost ou Vercel)
