@@ -21,6 +21,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
     <div className="min-h-screen w-full bg-gray-900 flex flex-col items-center py-20 px-4">
       <div className="w-full max-w-md flex flex-col items-center gap-6">
         
+        {/* FOTO DO USUÁRIO */}
         <div className="relative">
           <div className="h-24 w-24 rounded-full bg-white p-1">
              {user.image ? (
@@ -38,11 +39,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
 
+        {/* NOME E SLUG */}
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white">{user.name}</h1>
           <p className="text-gray-400">@{user.slug}</p>
         </div>
 
+        {/* LISTA DE LINKS */}
         <div className="w-full flex flex-col gap-4">
           {user.links.map((link) => (
             <a
@@ -50,9 +53,21 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full bg-gray-800 hover:bg-gray-700 transition-all text-white font-medium py-4 px-6 rounded-xl text-center border border-gray-700 hover:scale-[1.02]"
+              // Adicionei "relative flex items-center justify-center" para posicionar o ícone
+              className="relative flex items-center justify-center w-full bg-gray-800 hover:bg-gray-700 transition-all text-white font-medium py-4 px-6 rounded-xl border border-gray-700 hover:scale-[1.02]"
             >
-              {link.title}
+              {/* ÍCONE DO LINK (Se existir) */}
+              {link.icon && (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img 
+                  src={link.icon} 
+                  alt="" 
+                  className="absolute left-4 h-6 w-6 object-contain" // Fica fixo na esquerda
+                />
+              )}
+              
+              {/* TÍTULO DO LINK */}
+              <span>{link.title}</span>
             </a>
           ))}
 

@@ -1,10 +1,11 @@
-import { auth, signOut } from "@/auth"
+import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { CreateLinkForm } from "@/components/create-link-form"
 import { ProfileForm } from "@/components/profile-form"
 import { LinkList } from "@/components/link-list"
 import { UpgradeButton } from "@/components/upgrade-button"
+import { SignOutButton } from "@/components/sign-out-button" // <--- IMPORT NOVO
 
 export default async function Dashboard() {
   const session = await auth()
@@ -29,27 +30,18 @@ export default async function Dashboard() {
           <h1 className="text-xl font-bold text-gray-900">LinkHub</h1>
           
           <div className="flex items-center gap-4">
-            {/* Botão de Pagamento aqui */}
             <UpgradeButton />
 
-            <span className="text-sm font-medium text-gray-900">Olá, {session.user.name}</span>
+            <span className="text-sm font-medium text-gray-900">Olá, {user?.name || session.user.name}</span>
             
-            <form
-              action={async () => {
-                "use server"
-                await signOut({ redirectTo: "/" })
-              }}
-            >
-              <button type="submit" className="text-sm font-medium text-red-600 hover:underline">
-                Sair
-              </button>
-            </form>
+            {/* Trocamos o form antigo por este componente */}
+            <SignOutButton />
           </div>
         </div>
       </nav>
 
       <main className="mx-auto mt-10 max-w-xl px-4 pb-10">
-        <ProfileForm initialSlug={user?.slug} />
+        <ProfileForm user={user} />
         
         <CreateLinkForm />
 
