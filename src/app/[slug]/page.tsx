@@ -21,12 +21,16 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
     <div className="min-h-screen w-full bg-gray-900 flex flex-col items-center py-20 px-4">
       <div className="w-full max-w-md flex flex-col items-center gap-6">
         
-        {/* FOTO E NOME (Igual antes) */}
+        {/* FOTO DO USUÁRIO */}
         <div className="relative">
           <div className="h-24 w-24 rounded-full bg-white p-1">
              {user.image ? (
                /* eslint-disable-next-line @next/next/no-img-element */
-               <img src={user.image} alt={user.name || "User"} className="h-full w-full rounded-full object-cover" />
+               <img
+                 src={user.image}
+                 alt={user.name || "User"}
+                 className="h-full w-full rounded-full object-cover"
+               />
              ) : (
                <div className="h-full w-full rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-500">
                  {user.name?.[0]?.toUpperCase() || "U"}
@@ -35,12 +39,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
 
+        {/* NOME E SLUG */}
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white">{user.name}</h1>
           <p className="text-gray-400">@{user.slug}</p>
         </div>
 
-        {/* LISTA DE LINKS (Igual antes) */}
+        {/* LISTA DE LINKS */}
         <div className="w-full flex flex-col gap-4">
           {user.links.map((link) => (
             <a
@@ -50,24 +55,33 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               rel="noopener noreferrer"
               className="relative flex items-center justify-center w-full bg-gray-800 hover:bg-gray-700 transition-all text-white font-medium py-4 px-6 rounded-xl border border-gray-700 hover:scale-[1.02]"
             >
+              {/* ÍCONE DO LINK (Se existir) */}
               {link.icon && (
                 /* eslint-disable-next-line @next/next/no-img-element */
-                <img src={link.icon} alt="" className="absolute left-4 h-6 w-6 object-contain" />
+                <img 
+                  src={link.icon} 
+                  alt="" 
+                  className="absolute left-4 h-6 w-6 object-contain"
+                />
               )}
+              
+              {/* TÍTULO DO LINK */}
               <span>{link.title}</span>
             </a>
           ))}
 
           {user.links.length === 0 && (
-            <div className="text-center text-gray-500 py-4">Este usuário ainda não adicionou links.</div>
+            <div className="text-center text-gray-500 py-4">
+              Este usuário ainda não adicionou links.
+            </div>
           )}
         </div>
 
-        {/* --- AQUI ESTÁ A MUDANÇA: SÓ MOSTRA SE NÃO FOR PRO --- */}
-        {!user.isPro && (
+        {/* --- RODAPÉ COM MARCA D'ÁGUA (SÓ PARA PLANO FREE) --- */}
+        {user.plan === 'FREE' && (
             <div className="mt-8 text-gray-500 text-xs flex flex-col items-center gap-1">
                 <span>Feito com <span className="font-bold text-white">LinkHub</span></span>
-                <a href="/" className="hover:underline opacity-50 hover:opacity-100">Crie o seu grátis</a>
+                <Link href="/" className="hover:underline opacity-50 hover:opacity-100">Crie o seu grátis</Link>
             </div>
         )}
 
@@ -75,3 +89,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
     </div>
   )
 }
+
+// Pequeno ajuste para garantir que o Link seja importado se ainda não foi
+import Link from "next/link"
