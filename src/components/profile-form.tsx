@@ -49,8 +49,9 @@ export function ProfileForm({ user }: { user: any }) {
     const file = event.target.files?.[0]
     if (!file) return
 
-    if (file.size > 4 * 1024 * 1024) {
-        toast.error("A imagem deve ter no máximo 4MB")
+    // Limite de 4.5MB (Limite técnico da Vercel Server Actions)
+    if (file.size > 4.5 * 1024 * 1024) {
+        toast.error("A imagem deve ter no máximo 4.5MB")
         return
     }
 
@@ -63,12 +64,15 @@ export function ProfileForm({ user }: { user: any }) {
         const result = await uploadProfileImage(formData)
         
         if (result.error) {
+            // AQUI O CONSOLE LOG QUE VOCÊ PEDIU
+            console.error("❌ ERRO NO UPLOAD:", result.error)
             toast.error(result.error)
         } else {
             toast.success("Foto atualizada!")
             router.refresh()
         }
-    } catch {
+    } catch (error) {
+        console.error("❌ ERRO INESPERADO:", error)
         toast.error("Erro ao fazer upload")
     } finally {
         setIsUploading(false)
