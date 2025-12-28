@@ -6,7 +6,7 @@ import { saveProfile } from "@/app/actions/save-profile"
 import { uploadProfileImage } from "@/app/actions/upload-image"
 import { removeProfileImage, deleteAccount } from "@/app/actions/manage-profile"
 import { toast } from "sonner"
-import { ExternalLink, Copy, Save, Camera, Trash2, AlertTriangle, X } from "lucide-react"
+import { ExternalLink, Copy, Save, Camera, Trash2, AlertTriangle, X, Loader2 } from "lucide-react"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function ProfileForm({ user }: { user: any }) {
@@ -26,30 +26,54 @@ export function ProfileForm({ user }: { user: any }) {
     if (!slug) return
     setIsSaving(true)
 
-    const formData = new FormData()
-    formData.append("slug", slug)
+    try {
+        const formData = new FormData()
+        formData.append("slug", slug)
 
-    const result = await saveProfile(formData)
-    
-    setIsSaving(false)
-    if (result.error) return toast.error(result.error)
-    
-    toast.success("Link salvo!")
-    router.refresh()
+        const result = await saveProfile(formData)
+        
+        if (result.error) {
+            toast.error(result.error)
+        } else {
+            toast.success("Link salvo!")
+            router.refresh()
+        }
+    } catch {
+        toast.error("Erro ao salvar")
+    } finally {
+        setIsSaving(false)
+    }
   }
 
   async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    if (!event.target.files?.length) return
-    setIsUploading(true)
-    const formData = new FormData()
-    formData.append("image", event.target.files[0])
-    const result = await uploadProfileImage(formData)
-    if (result.error) toast.error(result.error)
-    else {
-      toast.success("Foto atualizada!")
-      router.refresh()
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 9 * 1024 * 1024) {
+        toast.error("A imagem deve ter no máximo 9MB")
+        return
     }
-    setIsUploading(false)
+
+    setIsUploading(true)
+
+    try {
+        const formData = new FormData()
+        formData.append("image", file)
+        
+        const result = await uploadProfileImage(formData)
+        
+        if (result.error) {
+            toast.error(result.error)
+        } else {
+            toast.success("Foto atualizada!")
+            router.refresh()
+        }
+    } catch {
+        toast.error("Erro no upload")
+    } finally {
+        setIsUploading(false)
+        event.target.value = ""
+    }
   }
 
   async function confirmRemoveImage() {
@@ -95,17 +119,39 @@ export function ProfileForm({ user }: { user: any }) {
                 {user?.name?.[0]?.toUpperCase()}
                 </div>
             )}
+            
+            {isUploading && (
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <Loader2 className="h-6 w-6 text-white animate-spin" />
+                </div>
+            )}
             </div>
             
             <div className="flex flex-col items-center sm:items-start gap-2">
             <h2 className="font-semibold text-gray-900">Foto de Perfil</h2>
             <div className="flex gap-2">
-                <label className="cursor-pointer rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                    {isUploading ? "..." : <><Camera className="h-4 w-4" /> Trocar</>}
-                    <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={isUploading}/>
+                <label className={`cursor-pointer rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                    {isUploading ? (
+                        <>
+                            <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
+                            <span>Enviando...</span>
+                        </>
+                    ) : (
+                        <>
+                            <Camera className="h-4 w-4" />
+                            <span>Trocar</span>
+                        </>
+                    )}
+                    <input 
+                        type="file" 
+                        accept="image/*" 
+                        className="hidden" 
+                        onChange={handleImageUpload} 
+                        disabled={isUploading}
+                    />
                 </label>
                 
-                {user?.image && (
+                {user?.image && !isUploading && (
                     <button 
                         onClick={() => setIsRemovePhotoModalOpen(true)}
                         className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-100 flex items-center gap-2"
@@ -131,8 +177,9 @@ export function ProfileForm({ user }: { user: any }) {
                             className="flex-1 bg-transparent text-gray-900 placeholder:text-gray-400 outline-none min-w-0" 
                         />
                     </div>
-                    <button onClick={handleSave} disabled={isSaving} className="flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 shrink-0">
-                        <Save className="h-4 w-4" /> Salvar
+                    <button onClick={handleSave} disabled={isSaving} className="flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 shrink-0 disabled:opacity-70">
+                        {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                        {isSaving ? "Salvando..." : "Salvar"}
                     </button>
                 </div>
 
