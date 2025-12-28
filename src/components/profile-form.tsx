@@ -8,7 +8,6 @@ import { removeProfileImage, deleteAccount } from "@/app/actions/manage-profile"
 import { toast } from "sonner"
 import { ExternalLink, Copy, Save, Camera, Trash2, AlertTriangle, X, Loader2 } from "lucide-react"
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function ProfileForm({ user }: { user: any }) {
   const [slug, setSlug] = useState(user?.slug || "")
   const [isSaving, setIsSaving] = useState(false)
@@ -49,7 +48,6 @@ export function ProfileForm({ user }: { user: any }) {
     const file = event.target.files?.[0]
     if (!file) return
 
-    // Limite de 4.5MB (Limite técnico da Vercel Server Actions)
     if (file.size > 4.5 * 1024 * 1024) {
         toast.error("A imagem deve ter no máximo 4.5MB")
         return
@@ -64,15 +62,12 @@ export function ProfileForm({ user }: { user: any }) {
         const result = await uploadProfileImage(formData)
         
         if (result.error) {
-            // AQUI O CONSOLE LOG QUE VOCÊ PEDIU
-            console.error("❌ ERRO NO UPLOAD:", result.error)
             toast.error(result.error)
         } else {
             toast.success("Foto atualizada!")
             router.refresh()
         }
-    } catch (error) {
-        console.error("❌ ERRO INESPERADO:", error)
+    } catch {
         toast.error("Erro ao fazer upload")
     } finally {
         setIsUploading(false)
@@ -116,7 +111,6 @@ export function ProfileForm({ user }: { user: any }) {
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 pb-6 border-b border-gray-100">
             <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full bg-gray-100 border border-gray-200 group">
             {user?.image ? (
-                /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={user.image} alt="Perfil" className="h-full w-full object-cover" />
             ) : (
                 <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-gray-400">

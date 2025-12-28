@@ -22,7 +22,7 @@ export async function uploadProfileImage(formData: FormData) {
     const blob = await put(imageFile.name, imageFile, {
       access: 'public',
       token: process.env.BLOB_READ_WRITE_TOKEN,
-      addRandomSuffix: true // <--- A MÁGICA ESTÁ AQUI (Cria nomes únicos)
+      addRandomSuffix: true 
     })
 
     await prisma.user.update({
