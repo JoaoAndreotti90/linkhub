@@ -11,8 +11,11 @@ export default async function UpgradePage() {
 
   const result = await createCheckout()
 
-  if (result?.url) {
-    redirect(result.url)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const url = (result as any)?.url
+
+  if (url) {
+    redirect(url)
   }
 
   redirect("/dashboard")
