@@ -25,9 +25,15 @@ export function ProfileForm({ user }: { user: any }) {
   async function handleSave() {
     if (!slug) return
     setIsSaving(true)
-    const result = await saveProfile(slug)
+
+    const formData = new FormData()
+    formData.append("slug", slug)
+
+    const result = await saveProfile(formData)
+    
     setIsSaving(false)
     if (result.error) return toast.error(result.error)
+    
     toast.success("Link salvo!")
     router.refresh()
   }
@@ -77,9 +83,9 @@ export function ProfileForm({ user }: { user: any }) {
 
   return (
     <>
-        <div className="mb-8 rounded-xl border bg-white p-6 shadow-sm space-y-8">
+        <div className="mb-8 rounded-xl border bg-white p-6 shadow-sm space-y-8 w-full max-w-full overflow-hidden">
         
-        <div className="flex items-center gap-6 pb-6 border-b border-gray-100">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 pb-6 border-b border-gray-100">
             <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full bg-gray-100 border border-gray-200 group">
             {user?.image ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
@@ -91,7 +97,7 @@ export function ProfileForm({ user }: { user: any }) {
             )}
             </div>
             
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col items-center sm:items-start gap-2">
             <h2 className="font-semibold text-gray-900">Foto de Perfil</h2>
             <div className="flex gap-2">
                 <label className="cursor-pointer rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2">
@@ -114,24 +120,25 @@ export function ProfileForm({ user }: { user: any }) {
         <div>
             <h2 className="mb-4 text-base font-semibold text-gray-900">Seu Link</h2>
             <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-2">
-                <div className="flex flex-1 items-center rounded-md border border-gray-300 bg-gray-50 px-3 py-2">
-                    <span className="text-gray-500 select-none">linkhub.com/</span>
-                    <input 
-                        value={slug} 
-                        onChange={(e) => setSlug(e.target.value)} 
-                        placeholder="seu-nome" 
-                        className="flex-1 bg-transparent text-gray-900 placeholder:text-gray-400 outline-none" 
-                    />
-                </div>
-                <button onClick={handleSave} disabled={isSaving} className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700">
-                    <Save className="h-4 w-4" /> Salvar
-                </button>
+                
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <div className="flex flex-1 items-center rounded-md border border-gray-300 bg-gray-50 px-3 py-2 overflow-hidden">
+                        <span className="text-gray-500 select-none whitespace-nowrap">linkhub.com/</span>
+                        <input 
+                            value={slug} 
+                            onChange={(e) => setSlug(e.target.value)} 
+                            placeholder="seu-nome" 
+                            className="flex-1 bg-transparent text-gray-900 placeholder:text-gray-400 outline-none min-w-0" 
+                        />
+                    </div>
+                    <button onClick={handleSave} disabled={isSaving} className="flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 shrink-0">
+                        <Save className="h-4 w-4" /> Salvar
+                    </button>
                 </div>
 
                 <div className="flex gap-3">
-                <button onClick={handleOpen} className="flex-1 flex justify-center items-center gap-2 rounded-md border border-gray-200 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"><ExternalLink className="h-4 w-4"/> Visitar</button>
-                <button onClick={handleCopy} className="flex-1 flex justify-center items-center gap-2 rounded-md border border-gray-200 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"><Copy className="h-4 w-4"/> Copiar</button>
+                    <button onClick={handleOpen} className="flex-1 flex justify-center items-center gap-2 rounded-md border border-gray-200 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"><ExternalLink className="h-4 w-4"/> Visitar</button>
+                    <button onClick={handleCopy} className="flex-1 flex justify-center items-center gap-2 rounded-md border border-gray-200 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"><Copy className="h-4 w-4"/> Copiar</button>
                 </div>
             </div>
         </div>
