@@ -49,8 +49,8 @@ export function ProfileForm({ user }: { user: any }) {
     const file = event.target.files?.[0]
     if (!file) return
 
-    if (file.size > 9 * 1024 * 1024) {
-        toast.error("A imagem deve ter no máximo 9MB")
+    if (file.size > 4 * 1024 * 1024) {
+        toast.error("A imagem deve ter no máximo 4MB")
         return
     }
 
@@ -69,7 +69,7 @@ export function ProfileForm({ user }: { user: any }) {
             router.refresh()
         }
     } catch {
-        toast.error("Erro no upload")
+        toast.error("Erro ao fazer upload")
     } finally {
         setIsUploading(false)
         event.target.value = ""
