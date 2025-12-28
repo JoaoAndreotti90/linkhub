@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
+import { LinkCard } from "@/components/link-card"
 
 export default async function ProfilePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -25,6 +26,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
         <div className="relative">
           <div className="h-24 w-24 rounded-full bg-white p-1">
              {user.image ? (
+               /* eslint-disable-next-line @next/next/no-img-element */
                <img
                  src={user.image}
                  alt={user.name || "User"}
@@ -45,22 +47,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
 
         <div className="w-full flex flex-col gap-4">
           {user.links.map((link) => (
-            <a
-              key={link.id}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative flex items-center justify-center w-full bg-gray-800 hover:bg-gray-700 transition-all text-white font-medium py-4 px-6 rounded-xl border border-gray-700 hover:scale-[1.02]"
-            >
-              {link.icon && (
-                <img 
-                  src={link.icon} 
-                  alt="" 
-                  className="absolute left-4 h-6 w-6 object-contain"
-                />
-              )}
-              <span>{link.title}</span>
-            </a>
+            <LinkCard 
+                key={link.id}
+                id={link.id}
+                title={link.title}
+                url={link.url}
+                icon={link.icon}
+            />
           ))}
 
           {user.links.length === 0 && (

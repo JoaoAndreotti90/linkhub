@@ -1,14 +1,16 @@
 "use client"
 
 import { increaseClick } from "@/app/actions/increase-click"
+import Image from "next/image"
 
 interface LinkCardProps {
   id: string
   title: string
   url: string
+  icon?: string | null
 }
 
-export function LinkCard({ id, title, url }: LinkCardProps) {
+export function LinkCard({ id, title, url, icon }: LinkCardProps) {
   
   function handleClick() {
     increaseClick(id)
@@ -20,9 +22,19 @@ export function LinkCard({ id, title, url }: LinkCardProps) {
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
-      className="group flex w-full items-center justify-center rounded-xl bg-gray-800 p-4 font-semibold text-white transition-all hover:scale-105 hover:bg-gray-700"
+      className="relative flex items-center justify-center w-full bg-gray-800 hover:bg-gray-700 transition-all text-white font-medium py-4 px-6 rounded-xl border border-gray-700 hover:scale-[1.02]"
     >
-      {title}
+      {icon && (
+        <div className="absolute left-4 h-8 w-8">
+            <img 
+                src={icon} 
+                alt="" 
+                className="h-full w-full object-contain"
+            />
+        </div>
+      )}
+      
+      <span className="text-center w-full">{title}</span>
     </a>
   )
 }
