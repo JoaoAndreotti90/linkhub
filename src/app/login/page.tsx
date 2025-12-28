@@ -2,7 +2,11 @@ import { signIn } from "@/auth"
 import { EmailLoginForm } from "@/components/email-login-form"
 import Link from "next/link" 
 
-export default function LoginPage() {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function LoginPage(props: any) {
+  const searchParams = props.searchParams
+  const redirectTo = searchParams?.callbackUrl || "/dashboard"
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg border border-gray-100">
@@ -14,7 +18,7 @@ export default function LoginPage() {
         <form
           action={async () => {
             "use server"
-            await signIn("google", { redirectTo: "/dashboard" })
+            await signIn("google", { redirectTo })
           }}
         >
           <button className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-3 font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">

@@ -150,7 +150,7 @@ export default async function Home() {
                   </li>
                 </ul>
 
-                <Link href="/login" className="block w-full py-3 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-center hover:opacity-90 transition-opacity">
+                <Link href="/upgrade" className="block w-full py-3 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-center hover:opacity-90 transition-opacity">
                   Virar PRO
                 </Link>
               </div>
