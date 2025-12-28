@@ -31,9 +31,9 @@ export default async function Dashboard() {
           
           <div className="flex items-center gap-4">
             <UpgradeButton plan={user?.plan} />
-
-            <span className="text-sm font-medium text-gray-900">Olá, {user?.name || session.user.name}</span>
-            
+            <span className="text-sm font-medium text-gray-900">
+              Olá, {user?.name || session.user.name}
+            </span>
             <SignOutButton />
           </div>
         </div>

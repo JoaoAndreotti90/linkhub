@@ -132,7 +132,7 @@ export default async function Home() {
                 </div>
                 
                 <h3 className="text-2xl font-bold">PRO</h3>
-                <div className="text-4xl font-bold mt-4 mb-2">R$ 19,90 <span className="text-lg font-normal text-gray-400">/mês</span></div>
+                <div className="text-4xl font-bold mt-4 mb-2">R$ 9,90 <span className="text-lg font-normal text-gray-400">/mês</span></div>
                 <p className="text-gray-400 mb-8">Para criadores e profissionais.</p>
                 
                 <ul className="space-y-4 mb-8">
@@ -143,7 +143,7 @@ export default async function Home() {
                     <Check className="h-5 w-5 text-blue-400" /> Analytics Avançado
                   </li>
                   <li className="flex items-center gap-3">
-                    <Check className="h-5 w-5 text-blue-400" /> Sem marca d'água
+                    <Check className="h-5 w-5 text-blue-400" /> Sem marca d&apos;água
                   </li>
                   <li className="flex items-center gap-3">
                     <Check className="h-5 w-5 text-blue-400" /> Suporte Prioritário
@@ -161,7 +161,7 @@ export default async function Home() {
 
       <footer className="border-t bg-white py-12">
         <div className="mx-auto max-w-6xl px-4 text-center">
-          <p className="text-gray-500">© 2025 LinkHub. Feito com ❤️ por João Andreotti.</p>
+          <p className="text-gray-500">© 2025 LinkHub. Feito por João Andreotti.</p>
         </div>
       </footer>
     </div>

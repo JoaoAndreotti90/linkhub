@@ -12,7 +12,6 @@ const linkSchema = z.object({
   type: z.string() 
 })
 
-// Ícones prontos (URLs públicas)
 const ICONS = {
     instagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/600px-Instagram_icon.png",
     github: "https://cdn-icons-png.flaticon.com/512/25/25231.png",
@@ -31,13 +30,11 @@ export async function createLink(formData: FormData) {
   const type = formData.get("type") as string
   const imageFile = formData.get("image") as File
 
-  // Validação
   const validation = linkSchema.safeParse({ title, url, type })
   if (!validation.success) return { error: "Preencha título e URL corretamente" }
 
   let imageUrl = ICONS.default
 
-  // Lógica da Imagem/Ícone
   if (type === "custom" && imageFile && imageFile.size > 0) {
       try {
         const blob = await put(imageFile.name, imageFile, { 
@@ -53,7 +50,6 @@ export async function createLink(formData: FormData) {
       imageUrl = ICONS[type]
   }
 
-  // Pegar ordem
   const lastLink = await prisma.link.findFirst({
     where: { userId: session.user.id },
     orderBy: { order: 'desc' }
@@ -65,7 +61,7 @@ export async function createLink(formData: FormData) {
       userId: session.user.id,
       title,
       url,
-      icon: imageUrl, // <--- CORRIGIDO AQUI (Era "image", agora é "icon")
+      icon: imageUrl,
       order: newOrder
     }
   })

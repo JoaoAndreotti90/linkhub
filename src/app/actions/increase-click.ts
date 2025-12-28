@@ -13,6 +13,6 @@ export async function increaseClick(linkId: string) {
       }
     })
   } catch (error) {
-    console.error("Erro ao computar clique", error)
+    console.error(error)
   }
 }

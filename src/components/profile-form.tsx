@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { saveProfile } from "@/app/actions/save-profile"
 import { uploadProfileImage } from "@/app/actions/upload-image"
-import { removeProfileImage, deleteAccount } from "@/app/actions/profile-settings"
+import { removeProfileImage, deleteAccount } from "@/app/actions/manage-profile"
 import { toast } from "sonner"
 import { ExternalLink, Copy, Save, Camera, Trash2, AlertTriangle, X } from "lucide-react"
 
@@ -14,9 +14,8 @@ export function ProfileForm({ user }: { user: any }) {
   const [isSaving, setIsSaving] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   
-  // Estados para controlar as janelas (Modais)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [isRemovePhotoModalOpen, setIsRemovePhotoModalOpen] = useState(false) // <--- NOVO
+  const [isRemovePhotoModalOpen, setIsRemovePhotoModalOpen] = useState(false)
   
   const [deleteConfirmation, setDeleteConfirmation] = useState("")
   const [isDeleting, setIsDeleting] = useState(false)
@@ -47,11 +46,10 @@ export function ProfileForm({ user }: { user: any }) {
     setIsUploading(false)
   }
 
-  // Função nova: Confirma e remove a foto sem usar alert()
   async function confirmRemoveImage() {
     await removeProfileImage()
     toast.success("Foto removida")
-    setIsRemovePhotoModalOpen(false) // Fecha a janela
+    setIsRemovePhotoModalOpen(false) 
     router.refresh()
   }
 
@@ -81,7 +79,6 @@ export function ProfileForm({ user }: { user: any }) {
     <>
         <div className="mb-8 rounded-xl border bg-white p-6 shadow-sm space-y-8">
         
-        {/* --- FOTO DE PERFIL --- */}
         <div className="flex items-center gap-6 pb-6 border-b border-gray-100">
             <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full bg-gray-100 border border-gray-200 group">
             {user?.image ? (
@@ -104,7 +101,7 @@ export function ProfileForm({ user }: { user: any }) {
                 
                 {user?.image && (
                     <button 
-                        onClick={() => setIsRemovePhotoModalOpen(true)} // Abre a nossa janela bonita
+                        onClick={() => setIsRemovePhotoModalOpen(true)}
                         className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-100 flex items-center gap-2"
                     >
                         <Trash2 className="h-4 w-4" />
@@ -114,7 +111,6 @@ export function ProfileForm({ user }: { user: any }) {
             </div>
         </div>
 
-        {/* --- LINK PERSONALIZADO --- */}
         <div>
             <h2 className="mb-4 text-base font-semibold text-gray-900">Seu Link</h2>
             <div className="flex flex-col gap-4">
@@ -140,7 +136,6 @@ export function ProfileForm({ user }: { user: any }) {
             </div>
         </div>
 
-        {/* --- ZONA DE PERIGO --- */}
         <div className="pt-6 border-t border-red-100">
             <h3 className="text-red-600 font-semibold flex items-center gap-2 mb-2">
                 <AlertTriangle className="h-4 w-4"/> Zona de Perigo
@@ -155,7 +150,6 @@ export function ProfileForm({ user }: { user: any }) {
         </div>
         </div>
 
-        {/* --- MODAL DE REMOVER FOTO (NOVO) --- */}
         {isRemovePhotoModalOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
                 <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl animate-in fade-in zoom-in duration-200">
@@ -169,7 +163,6 @@ export function ProfileForm({ user }: { user: any }) {
             </div>
         )}
 
-        {/* --- MODAL DE EXCLUIR CONTA --- */}
         {isDeleteModalOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
                 <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl animate-in fade-in zoom-in duration-200">

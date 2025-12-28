@@ -7,7 +7,7 @@ import { Plus, Link as LinkIcon, Image as ImageIcon } from "lucide-react"
 
 export function CreateLinkForm() {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedType, setSelectedType] = useState("instagram") // Padrão
+  const [selectedType, setSelectedType] = useState("instagram")
 
   async function handleSubmit(formData: FormData) {
     const result = await createLink(formData)
@@ -37,14 +37,12 @@ export function CreateLinkForm() {
       
       <form action={handleSubmit} className="flex flex-col gap-4">
         
-        {/* SELETOR DE TIPO */}
         <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">Tipo de Link</label>
             <select 
                 name="type" 
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
-                // ADICIONEI "text-gray-900" AQUI EMBAIXO PARA O TEXTO FICAR PRETO
                 className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 outline-none focus:border-blue-500 text-gray-900"
             >
                 <option value="instagram" className="text-gray-900">Instagram (Ícone Automático)</option>
@@ -56,7 +54,6 @@ export function CreateLinkForm() {
             </select>
         </div>
 
-        {/* UPLOAD DE IMAGEM (Só aparece se for "Outros") */}
         {selectedType === "custom" && (
             <div className="animate-in fade-in slide-in-from-top-2 duration-300">
                 <label className="mb-1 block text-sm font-medium text-gray-700">Ícone Personalizado</label>

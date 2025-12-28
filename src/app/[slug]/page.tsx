@@ -1,5 +1,6 @@
-import { prisma } from "@/lib/prisma"
+import Link from "next/link"
 import { notFound } from "next/navigation"
+import { prisma } from "@/lib/prisma"
 
 export default async function ProfilePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -21,11 +22,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
     <div className="min-h-screen w-full bg-gray-900 flex flex-col items-center py-20 px-4">
       <div className="w-full max-w-md flex flex-col items-center gap-6">
         
-        {/* FOTO DO USUÁRIO */}
         <div className="relative">
           <div className="h-24 w-24 rounded-full bg-white p-1">
              {user.image ? (
-               /* eslint-disable-next-line @next/next/no-img-element */
                <img
                  src={user.image}
                  alt={user.name || "User"}
@@ -39,13 +38,11 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
 
-        {/* NOME E SLUG */}
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white">{user.name}</h1>
           <p className="text-gray-400">@{user.slug}</p>
         </div>
 
-        {/* LISTA DE LINKS */}
         <div className="w-full flex flex-col gap-4">
           {user.links.map((link) => (
             <a
@@ -55,17 +52,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               rel="noopener noreferrer"
               className="relative flex items-center justify-center w-full bg-gray-800 hover:bg-gray-700 transition-all text-white font-medium py-4 px-6 rounded-xl border border-gray-700 hover:scale-[1.02]"
             >
-              {/* ÍCONE DO LINK (Se existir) */}
               {link.icon && (
-                /* eslint-disable-next-line @next/next/no-img-element */
                 <img 
                   src={link.icon} 
                   alt="" 
                   className="absolute left-4 h-6 w-6 object-contain"
                 />
               )}
-              
-              {/* TÍTULO DO LINK */}
               <span>{link.title}</span>
             </a>
           ))}
@@ -77,7 +70,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
           )}
         </div>
 
-        {/* --- RODAPÉ COM MARCA D'ÁGUA (SÓ PARA PLANO FREE) --- */}
         {user.plan === 'FREE' && (
             <div className="mt-8 text-gray-500 text-xs flex flex-col items-center gap-1">
                 <span>Feito com <span className="font-bold text-white">LinkHub</span></span>
@@ -89,6 +81,3 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
     </div>
   )
 }
-
-// Pequeno ajuste para garantir que o Link seja importado se ainda não foi
-import Link from "next/link"

@@ -17,7 +17,6 @@ export function SignOutButton() {
         Sair
       </button>
 
-      {/* Modal de Confirmação de Saída */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
             <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl animate-in fade-in zoom-in duration-200">

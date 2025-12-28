@@ -1,28 +1,38 @@
 "use server"
 
+import { z } from "zod"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 
-export async function saveProfile(slug: string) {
+const profileSchema = z.object({
+  slug: z.string()
+    .min(3, "O link deve ter pelo menos 3 letras")
+    .regex(/^[a-z0-9-]+$/, "Apenas letras minúsculas, números e traços")
+})
+
+export async function saveProfile(formData: FormData) {
   const session = await auth()
 
   if (!session?.user?.id) {
     return { error: "Não autorizado" }
   }
 
-  const regex = /^[a-z0-9-]+$/
-  if (!regex.test(slug)) {
-    return { error: "O link só pode conter letras minúsculas, números e traços." }
+  const slug = formData.get("slug") as string
+
+  const validation = profileSchema.safeParse({ slug })
+
+  if (!validation.success) {
+    return { error: validation.error.errors[0].message }
   }
 
   try {
-    const existing = await prisma.user.findUnique({
+    const existingUser = await prisma.user.findUnique({
       where: { slug }
     })
 
-    if (existing && existing.id !== session.user.id) {
-      return { error: "Este link já está em uso por outra pessoa." }
+    if (existingUser && existingUser.id !== session.user.id) {
+      return { error: "Este link já está em uso." }
     }
 
     await prisma.user.update({

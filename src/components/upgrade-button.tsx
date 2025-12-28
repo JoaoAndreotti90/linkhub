@@ -17,13 +17,10 @@ export function UpgradeButton({ plan = "FREE" }: UpgradeButtonProps) {
       try {
         const result = await createCheckout()
         
-        // --- CORREÇÃO AQUI ---
-        // Verificamos se 'result' existe e se é um objeto antes de tentar ler '.error'
         if (result && typeof result === 'object' && 'error' in result) {
              toast.error(result.error)
         }
       } catch (error) {
-        // Ignora o erro de redirecionamento do Next.js, loga outros erros
         console.error(error)
       }
     })

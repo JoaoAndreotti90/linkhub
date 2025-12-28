@@ -45,11 +45,9 @@ export async function createCheckout() {
     }
     
   } catch (error) {
-    console.error("Erro Stripe:", error)
     return { error: "Erro ao conectar com o Stripe" }
   }
 
-  // --- CORREÇÃO: O redirect TEM que ficar fora do try/catch ---
   if (checkoutUrl) {
     redirect(checkoutUrl)
   }
