@@ -2,7 +2,7 @@
 
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd"
 import { GripVertical, Trash2 } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react" 
 import { deleteLink } from "@/app/actions/delete-link"
 import { reorderLinks } from "@/app/actions/reorder-links"
 import { toast } from "sonner"
@@ -20,6 +20,10 @@ export function LinkList({ initialLinks }: { initialLinks: Link[] }) {
   const [links, setLinks] = useState(initialLinks)
   const [linkToDelete, setLinkToDelete] = useState<string | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+
+  useEffect(() => {
+    setLinks(initialLinks)
+  }, [initialLinks])
 
   async function handleDragEnd(result: DropResult) {
     if (!result.destination) return
