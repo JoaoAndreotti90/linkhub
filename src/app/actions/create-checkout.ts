@@ -27,6 +27,7 @@ export async function createCheckout() {
       mode: "subscription",
       payment_method_types: ["card"],
       customer_email: session.user.email,
+      client_reference_id: session.user.id, 
       line_items: [
         {
           price: process.env.STRIPE_PRICE_ID,
