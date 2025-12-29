@@ -26,7 +26,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
         <div className="relative">
           <div className="h-24 w-24 rounded-full bg-white p-1">
              {user.image ? (
-               /* eslint-disable-next-line @next/next/no-img-element */
                <img
                  src={user.image}
                  alt={user.name || "User"}

@@ -13,6 +13,5 @@ export async function increaseClick(linkId: string) {
       }
     })
   } catch (error) {
-    console.error(error)
   }
 }

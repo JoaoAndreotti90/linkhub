@@ -23,20 +23,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       authorize: async (credentials) => {
         try {
           const { email, password } = await loginSchema.parseAsync(credentials)
+          const user = await prisma.user.findUnique({ where: { email } })
 
-          const user = await prisma.user.findUnique({
-            where: { email }
-          })
-
-          if (!user || !user.password) {
-            return null
-          }
-
+          if (!user || !user.password) return null
+          
           const passwordsMatch = await bcrypt.compare(password, user.password)
-
-          if (!passwordsMatch) {
-            return null
-          }
+          if (!passwordsMatch) return null
 
           return user
         } catch {
@@ -45,17 +37,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
     })
   ],
-  session: {
-    strategy: "jwt"
-  },
+  session: { strategy: "jwt" },
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      if (url.includes("upgrade")) {
+        return url.startsWith("http") ? url : `${baseUrl}/upgrade`
+      }
+
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      else if (new URL(url).origin === baseUrl) return url
+      
+      return baseUrl + "/dashboard"
+    },
     async session({ session, token }) {
       if (token.sub && session.user) {
         session.user.id = token.sub
         const user = await prisma.user.findUnique({ where: { id: token.sub }})
         if (user) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (session.user as any).slug = user.slug
+           // eslint-disable-next-line @typescript-eslint/no-explicit-any
+           (session.user as any).slug = user.slug
         }
       }
       return session

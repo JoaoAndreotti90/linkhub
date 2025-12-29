@@ -11,13 +11,16 @@ export async function createCheckout() {
     return { error: "Não autorizado" }
   }
 
+  if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_PRICE_ID) {
+    return { error: "Erro de Configuração" }
+  }
+
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-    apiVersion: "2024-12-18.acacia", 
     typescript: true,
   })
 
   const headersList = await headers()
-  const origin = headersList.get("origin") || "https://linkhub-gamma.vercel.app"
+  const origin = headersList.get("origin") || "http://localhost:3000"
 
   try {
     const checkoutSession = await stripe.checkout.sessions.create({
@@ -38,8 +41,8 @@ export async function createCheckout() {
     })
 
     return { url: checkoutSession.url }
-  } catch (error) {
-    console.error("Stripe Error:", error)
-    return { error: "Erro ao criar checkout" }
+
+  } catch (error: any) {
+    return { error: `Erro Stripe: ${error.message}` }
   }
 }

@@ -1,54 +1,79 @@
 "use client"
 
-import { useState } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
+import { useState, Suspense } from "react"
+import { loginWithCreds } from "@/app/actions/email-login"
 import { toast } from "sonner"
-import { loginUser } from "@/app/actions/login-user"
+import { Loader2 } from "lucide-react"
 
-export function EmailLoginForm() {
+function EmailLoginFormContent() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
   const [isLoading, setIsLoading] = useState(false)
 
   async function handleSubmit(formData: FormData) {
     setIsLoading(true)
     
-    const result = await loginUser(formData)
+    formData.set("redirectTo", callbackUrl)
 
-    if (result?.error) {
-      toast.error(result.error)
+    try {
+      const result = await loginWithCreds(formData)
+      
+      if (result?.error) {
+        toast.error(result.error)
+        setIsLoading(false)
+      } else if (result?.success && result?.url) {
+        toast.success("Entrando...")
+        window.location.href = result.url
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.")
       setIsLoading(false)
     }
   }
 
   return (
-    <form action={handleSubmit} className="flex flex-col gap-4">
-      <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-gray-700">Email</label>
-        <input 
+    <form action={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <input
           name="email"
-          type="email" 
+          type="email"
           required
           placeholder="seu@email.com"
-          className="rounded-lg border border-gray-300 px-4 py-2 text-gray-900 placeholder:text-gray-400 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all"
+          className="w-full rounded-lg border border-gray-300 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 outline-none"
         />
       </div>
 
-      <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-gray-700">Senha</label>
-        <input 
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+        <input
           name="password"
-          type="password" 
+          type="password"
           required
-          placeholder="********"
-          className="rounded-lg border border-gray-300 px-4 py-2 text-gray-900 placeholder:text-gray-400 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all"
+          placeholder="••••••••"
+          className="w-full rounded-lg border border-gray-300 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 outline-none"
         />
       </div>
 
-      <button 
+      <input type="hidden" name="redirectTo" value={callbackUrl} />
+
+      <button
         type="submit"
         disabled={isLoading}
-        className="w-full rounded-lg bg-blue-600 px-4 py-3 font-bold text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
+        className="w-full rounded-lg bg-gray-900 px-5 py-3 text-center text-sm font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 disabled:opacity-50 flex justify-center"
       >
-        {isLoading ? "Entrando..." : "Entrar com Email"}
+        {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Entrar com Email"}
       </button>
     </form>
+  )
+}
+
+export function EmailLoginForm() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <EmailLoginFormContent />
+    </Suspense>
   )
 }
