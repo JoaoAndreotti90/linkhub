@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🔗 LinkHub
 
-## Getting Started
+> Uma plataforma SaaS completa para gerenciamento de links (estilo Linktree), desenvolvida com as tecnologias mais modernas.
 
-First, run the development server:
+![Project Preview](/public/preview.png)
+<img width="1635" height="943" alt="site15" src="https://github.com/user-attachments/assets/3898c6b0-80fe-4b71-b5dd-ee6c245c3881" />
 
+
+## 🌐 Demonstração Ao Vivo
+Acesse o projeto rodando em produção:
+👉 **[https://linkhub-gamma.vercel.app/](https://linkhub-gamma.vercel.app/)**
+
+---
+
+## 🛠 Tecnologias Utilizadas
+
+Este projeto foi construído para simular um ambiente real de produção, utilizando:
+
+- **Framework:** [Next.js](https://nextjs.org/) (App Router & Server Components)
+- **Linguagem:** [TypeScript](https://www.typescriptlang.org/)
+- **Estilização:** [Tailwind CSS](https://tailwindcss.com/)
+- **Banco de Dados:** PostgreSQL (via Prisma ORM)
+- **Autenticação:** NextAuth (Google & Email)
+- **Pagamentos:** Stripe (Checkout & Webhooks)
+- **Upload:** Vercel Blob
+- **UX:** Drag-and-Drop (@hello-pangea/dnd)
+
+---
+
+## 🚀 Funcionalidades Principais
+
+- **🔐 Autenticação Segura:** Login social (Google) e via credenciais.
+- **💳 Assinatura PRO (SaaS):** Integração completa com **Stripe**. O sistema utiliza **Webhooks** para ouvir a confirmação de pagamento e liberar o acesso PRO automaticamente no banco de dados.
+- **🔄 Drag-and-Drop:** Reordenação intuitiva dos links apenas arrastando e soltando.
+- **📱 Perfil Público:** Cada usuário tem uma URL única (`/seu-nome`) otimizada para mobile.
+- **⚡ Server Actions:** Toda a mutação de dados (criar, editar, deletar links) roda diretamente no servidor, garantindo segurança e performance.
+- **📈 Analytics Simples:** Contagem de cliques em cada link.
+
+---
+
+## ⚠️ Nota sobre Pagamentos
+
+O projeto está configurado no **Modo de Teste** do Stripe.
+Você pode simular uma assinatura PRO utilizando os dados de teste padrão do Stripe (ex: cartão 4242...), sem nenhuma cobrança real no seu cartão.
+
+---
+
+## 💻 Como rodar localmente
+
+1. **Clone o repositório:**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+git clone [https://github.com/JoaoAndreotti90/linkhub.git](https://github.com/JoaoAndreotti90/linkhub.git)
+cd linkhub
