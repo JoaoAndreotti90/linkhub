@@ -2,7 +2,6 @@
 
 > Uma plataforma SaaS completa para gerenciamento de links (estilo Linktree), desenvolvida com as tecnologias mais modernas.
 
-![Project Preview](/public/preview.png)
 <img width="1635" height="943" alt="site15" src="https://github.com/user-attachments/assets/3898c6b0-80fe-4b71-b5dd-ee6c245c3881" />
 
 
